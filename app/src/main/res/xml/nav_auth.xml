@@ -95,11 +95,13 @@
         android:name="com.example.inmueblecheck.MapaFragment"
         android:label="Mapa de Propiedades"
         tools:layout="@layout/fragment_mapa" />
+
     <fragment
         android:id="@+id/aboutFragment"
         android:name="com.example.inmueblecheck.AboutFragment"
         android:label="Acerca de"
         tools:layout="@layout/fragment_about" />
+
     <fragment
         android:id="@+id/historialFragment"
         android:name="com.example.inmueblecheck.HistorialFragment"
@@ -120,6 +122,13 @@
         <argument android:name="chatId" app:argType="string"/>
         <argument android:name="titulo" app:argType="string"/>
     </fragment>
+
+    <!-- NUEVA PANTALLA DE CONFIGURACIÓN -->
+    <fragment
+        android:id="@+id/configuracionFragment"
+        android:name="com.example.inmueblecheck.ConfiguracionFragment"
+        android:label="Configuración"
+        tools:layout="@layout/fragment_configuracion" />
 
     <action
         android:id="@+id/action_global_conversacionFragment"

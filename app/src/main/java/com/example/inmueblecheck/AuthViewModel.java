@@ -39,7 +39,8 @@ public class AuthViewModel extends AndroidViewModel {
                 });
     }
 
-    public void register(String email, String password, String role) {
+    // AHORA RECIBE EL NOMBRE
+    public void register(String nombre, String email, String password, String role) {
         _authResult.setValue(AuthResultState.loading());
         if (password.length() < 6) {
             _authResult.setValue(AuthResultState.error("La contraseña debe tener al menos 6 caracteres."));
@@ -49,17 +50,19 @@ public class AuthViewModel extends AndroidViewModel {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        saveUserRoleToFirestore(mAuth.getCurrentUser(), role);
+                        saveUserRoleToFirestore(mAuth.getCurrentUser(), nombre, role);
                     } else {
                         _authResult.setValue(AuthResultState.error(Objects.requireNonNull(task.getException()).getMessage()));
                     }
                 });
     }
 
-    private void saveUserRoleToFirestore(FirebaseUser user, String role) {
+    // AHORA GUARDA EL NOMBRE EN FIRESTORE
+    private void saveUserRoleToFirestore(FirebaseUser user, String nombre, String role) {
         String uid = user.getUid();
         Map<String, Object> userData = new HashMap<>();
         userData.put("uid", uid);
+        userData.put("nombre", nombre); // Guardando el nombre
         userData.put("email", user.getEmail());
         userData.put("role", role);
 
@@ -70,7 +73,7 @@ public class AuthViewModel extends AndroidViewModel {
                     mAuth.signOut();
                 })
                 .addOnFailureListener(e ->
-                        _authResult.setValue(AuthResultState.error("Error al guardar rol: " + e.getMessage())));
+                        _authResult.setValue(AuthResultState.error("Error al guardar datos: " + e.getMessage())));
     }
 
     private void fetchUserRole(FirebaseUser user) {
@@ -80,7 +83,6 @@ public class AuthViewModel extends AndroidViewModel {
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
                         String role = documentSnapshot.getString("role");
-                        // Validamos que el rol exista
                         if (role == null) role = "arrendatario";
                         _authResult.setValue(AuthResultState.success(user, role));
                     } else {
@@ -94,7 +96,6 @@ public class AuthViewModel extends AndroidViewModel {
                 });
     }
 
-    // Estados para la UI
     public static class AuthResultState {
         public enum Status { SUCCESS, ERROR, LOADING, REGISTRATION_SUCCESS }
         public final Status status;

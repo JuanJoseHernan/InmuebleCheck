@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/filtro_venta"
+        android:title="Solo Venta" />
+    <item
+        android:id="@+id/filtro_renta"
+        android:title="Solo Renta" />
+    <item
+        android:id="@+id/filtro_todos"
+        android:title="Ver Todos" />
+</menu>

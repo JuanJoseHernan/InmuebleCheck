@@ -18,6 +18,26 @@
             android:title="Mensajes" />
     </group>
 
+    <item
+        android:id="@+id/nav_menu_arrendador"
+        android:title="Arrendador"
+        android:visible="false">
+        <menu>
+            <item
+                android:id="@+id/nav_mis_propiedades"
+                android:icon="@drawable/ic_home_black"
+                android:title="Mis Propiedades" />
+            <item
+                android:id="@+id/nav_historial"
+                android:icon="@android:drawable/ic_menu_recent_history"
+                android:title="Historial" />
+            <item
+                android:id="@+id/nav_crear_inmueble"
+                android:icon="@drawable/ic_add"
+                android:title="Agregar Inmueble" />
+        </menu>
+    </item>
+
     <item android:title="Filtros">
         <menu>
             <item
@@ -35,16 +55,12 @@
         </menu>
     </item>
 
-    <item android:title="Más">
+    <item android:title="Ajustes">
         <menu>
             <item
-                android:id="@+id/nav_about"
-                android:icon="@android:drawable/ic_menu_info_details"
-                android:title="Acerca de" />
-            <item
-                android:id="@+id/nav_logout"
-                android:icon="@drawable/logout"
-                android:title="Salir" />
+                android:id="@+id/nav_configuracion"
+                android:icon="@android:drawable/ic_menu_preferences"
+                android:title="Configuración" />
         </menu>
     </item>
 </menu>

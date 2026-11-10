@@ -16,6 +16,8 @@ import androidx.navigation.Navigation;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 
+import com.google.firebase.auth.FirebaseUser;
+
 public class LoginFragment extends Fragment {
     private AuthViewModel authViewModel;
     private TextInputEditText etEmail, etPassword;
@@ -53,7 +55,10 @@ public class LoginFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+        FirebaseUser currentUser = com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null && getView() != null) {
+            androidx.navigation.Navigation.findNavController(requireView())
+                    .navigate(R.id.action_loginFragment_to_agenteDashboardFragment);
         }
     }
 
@@ -84,12 +89,8 @@ public class LoginFragment extends Fragment {
                     progressBar.setVisibility(View.GONE);
                     btnLogin.setEnabled(true);
 
-                    // Navegación en ROL
-                    if ("arrendador".equals(authResultState.role) || "gerente".equals(authResultState.role)) {
-                        Navigation.findNavController(getView()).navigate(R.id.action_loginFragment_to_gerenteDashboardFragment);
-                    } else {
-                        Navigation.findNavController(getView()).navigate(R.id.action_loginFragment_to_agenteDashboardFragment);
-                    }
+                    // Unificación: Todos los usuarios van al mismo Dashboard base.
+                    Navigation.findNavController(getView()).navigate(R.id.action_loginFragment_to_agenteDashboardFragment);
                     break;
                 case ERROR:
                     progressBar.setVisibility(View.GONE);

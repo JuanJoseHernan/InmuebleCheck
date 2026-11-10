@@ -12,19 +12,23 @@
         android:background="@color/blue_primary"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
+    <!-- MARGEN INFERIOR AÑADIDO A LA LISTA PARA NO TAPAR ÚLTIMOS MENSAJES -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvChatMessages"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:padding="8dp"
+        android:paddingBottom="90dp"
         android:clipToPadding="false" />
 
+    <!-- MARGEN INFERIOR PARA ELEVAR LA BARRA DE TEXTO POR ENCIMA DE LA PÍLDORA -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="8dp"
+        android:layout_marginBottom="80dp"
         android:background="#EEEEEE">
 
         <EditText
@@ -47,5 +51,4 @@
             android:src="@android:drawable/ic_menu_send"
             android:contentDescription="Enviar" />
     </LinearLayout>
-
 </LinearLayout>

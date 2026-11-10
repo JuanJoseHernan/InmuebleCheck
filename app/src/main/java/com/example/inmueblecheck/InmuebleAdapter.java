@@ -106,7 +106,6 @@ public class InmuebleAdapter extends RecyclerView.Adapter<InmuebleAdapter.Inmueb
                 btnEstado.setVisibility(View.VISIBLE);
                 btnEstado.setOnClickListener(v -> stateListener.onEstadoClick(inmueble));
 
-                // Cambiar icono según estado actual
                 if ("disponible".equals(inmueble.getEstado())) {
                     btnEstado.setImageResource(android.R.drawable.checkbox_on_background);
                 } else {

@@ -5,27 +5,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ProgressBar;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
+
 import com.google.android.material.textfield.TextInputEditText;
 
 public class RegisterFragment extends Fragment {
 
     private AuthViewModel authViewModel;
-    private TextInputEditText etEmail, etPassword;
-    private RadioGroup radioGroupRole;
-    private RadioButton radioArrendatario, radioArrendador;
+    private TextInputEditText etNombre, etEmail, etPassword;
     private Button btnRegister;
     private TextView tvGoToLogin;
-    private ProgressBar progressBar;
+
+    public RegisterFragment() {
+        // Constructor vacío requerido
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -36,75 +36,52 @@ public class RegisterFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
+        authViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
 
-        etEmail = view.findViewById(R.id.etEmailRegister);
-        etPassword = view.findViewById(R.id.etPasswordRegister);
-        radioGroupRole = view.findViewById(R.id.radioGroupRole);
-
-
-        radioArrendatario = view.findViewById(R.id.radioAgente);
-        radioArrendador = view.findViewById(R.id.radioGerente);
-
-        radioArrendatario.setText("Busco Inmueble ");
-        radioArrendador.setText("Vendo Inmueble ");
-
+        etNombre = view.findViewById(R.id.etNombre);
+        etEmail = view.findViewById(R.id.etEmail);
+        etPassword = view.findViewById(R.id.etPassword);
         btnRegister = view.findViewById(R.id.btnRegister);
         tvGoToLogin = view.findViewById(R.id.tvGoToLogin);
-        progressBar = view.findViewById(R.id.progressBarRegister);
 
-        setupClickListeners();
-        setupObservers();
-    }
+        authViewModel.getAuthResult().observe(getViewLifecycleOwner(), authResultState -> {
+            if (authResultState == null) return;
 
-    private void setupClickListeners() {
+            switch (authResultState.status) {
+                case LOADING:
+                    btnRegister.setEnabled(false);
+                    btnRegister.setText("Registrando...");
+                    break;
+                case REGISTRATION_SUCCESS:
+                    btnRegister.setEnabled(true);
+                    btnRegister.setText("Registrarse");
+                    Toast.makeText(getContext(), "Cuenta creada con éxito", Toast.LENGTH_SHORT).show();
+                    Navigation.findNavController(view).popBackStack();
+                    break;
+                case ERROR:
+                    btnRegister.setEnabled(true);
+                    btnRegister.setText("Registrarse");
+                    Toast.makeText(getContext(), authResultState.errorMessage, Toast.LENGTH_LONG).show();
+                    break;
+            }
+        });
+
         btnRegister.setOnClickListener(v -> {
             String email = etEmail.getText().toString().trim();
             String password = etPassword.getText().toString().trim();
+            String nombre = etNombre.getText().toString().trim();
 
-            int selectedRoleId = radioGroupRole.getCheckedRadioButtonId();
-            String role;
-
-            if (selectedRoleId == R.id.radioGerente) {
-                role = "arrendador";
-            } else {
-                role = "arrendatario";
-            }
-
-            if (email.isEmpty() || password.isEmpty()) {
-                Toast.makeText(getContext(), "Por favor, llena todos los campos.", Toast.LENGTH_SHORT).show();
+            if (nombre.isEmpty() || email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(getContext(), "Por favor, llena todos los campos", Toast.LENGTH_SHORT).show();
                 return;
             }
-            authViewModel.register(email, password, role);
+
+            // AHORA ENVIAMOS EL NOMBRE TAMBIÉN
+            authViewModel.register(nombre, email, password, "arrendatario");
         });
 
         tvGoToLogin.setOnClickListener(v -> {
-            Navigation.findNavController(v).navigate(R.id.action_registerFragment_to_loginFragment);
-        });
-    }
-
-    private void setupObservers() {
-        authViewModel.getAuthResult().observe(getViewLifecycleOwner(), authResultState -> {
-            switch (authResultState.status) {
-                case LOADING:
-                    progressBar.setVisibility(View.VISIBLE);
-                    btnRegister.setEnabled(false);
-                    break;
-                case REGISTRATION_SUCCESS:
-                    progressBar.setVisibility(View.GONE);
-                    btnRegister.setEnabled(true);
-                    Toast.makeText(getContext(), "¡Registro exitoso! Inicia sesión para continuar.", Toast.LENGTH_LONG).show();
-                    Navigation.findNavController(getView()).navigate(R.id.action_registerFragment_to_loginFragment);
-                    break;
-                case ERROR:
-                    progressBar.setVisibility(View.GONE);
-                    btnRegister.setEnabled(true);
-                    Toast.makeText(getContext(), "Error: " + authResultState.errorMessage, Toast.LENGTH_LONG).show();
-                    break;
-                case SUCCESS:
-                    progressBar.setVisibility(View.GONE);
-                    break;
-            }
+            Navigation.findNavController(view).popBackStack();
         });
     }
 }

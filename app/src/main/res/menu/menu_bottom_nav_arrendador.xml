@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 1. Arrendador activo (Nuevo ícono de arrendador) -->
+    <item
+        android:id="@+id/nav_toggle_arrendatario"
+        android:icon="@drawable/ic_arrendador"
+        android:title="" />
+    <!-- 2. Mis Propiedades -->
+    <item
+        android:id="@+id/nav_mis_propiedades"
+        android:icon="@drawable/ic_home_black"
+        android:title="" />
+    <!-- 3. Historial -->
+    <item
+        android:id="@+id/nav_historial"
+        android:icon="@android:drawable/ic_menu_recent_history"
+        android:title="" />
+    <!-- 4. Agregar Inmueble -->
+    <item
+        android:id="@+id/nav_crear_inmueble"
+        android:icon="@drawable/ic_add"
+        android:title="" />
+    <!-- 5. Configuración (Nuevo ícono de tuerca) -->
+    <item
+        android:id="@+id/nav_configuracion"
+        android:icon="@drawable/ic_configuracion"
+        android:title="" />
+</menu>
